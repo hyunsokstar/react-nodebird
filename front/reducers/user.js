@@ -21,6 +21,10 @@ export const initialState = {
     unfollowDone: false,
     unfollowError: null,
 
+    signUpLoading: false, // 회원가입 시도중
+    signUpDone: false,
+    signUpError: null,
+
 };
 
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
@@ -42,6 +46,10 @@ export const UNFOLLOW_REQUEST = 'UNFOLLOW_REQUEST';
 export const UNFOLLOW_SUCCESS = 'UNFOLLOW_SUCCESS';
 export const UNFOLLOW_FAILURE = 'UNFOLLOW_FAILURE';
 
+export const SIGN_UP_REQUEST = 'SIGN_UP_REQUEST';
+export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS';
+export const SIGN_UP_FAILURE = 'SIGN_UP_FAILURE';
+
 
 const dummyUser = (data) => ({
     ...data,
@@ -57,18 +65,16 @@ const reducer = (state = initialState, action) => {
     return produce(state, (draft) => {
         switch (action.type) {
             case "LOG_IN_REQUEST":
- 
                 draft.logInLoading = true;
                 draft.logInDone = false;
                 draft.logInError = null;
                 break;
 
             case "LOG_IN_SUCCESS":
-
                 draft.logInDone = true;
                 draft.logInLoading = false;
-                draft.me= dummyUser(action.data);
-                // console.log("me check 11: ", me);
+                // draft.me= dummyUser(action.data);
+                draft.me= action.data;
                 break;
             case "LOG_IN_FAILURE":
  
@@ -126,6 +132,20 @@ const reducer = (state = initialState, action) => {
             case UNFOLLOW_FAILURE:
                 draft.unfollowLoading = false;
                 draft.unfollowError = action.error;
+                break;
+
+            case SIGN_UP_REQUEST:
+                draft.signUpLoading = true;
+                draft.signUpError = null;
+                draft.signUpDone = false;
+                break;
+            case SIGN_UP_SUCCESS:
+                draft.signUpLoading = false;
+                draft.signUpDone = true;
+                break;
+            case SIGN_UP_FAILURE:
+                draft.signUpLoading = false;
+                draft.signUpError = action.error;
                 break;
 
             default:

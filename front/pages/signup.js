@@ -1,21 +1,40 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Head from "next/head";
 import AppLayout from "../components/AppLayout";
 import { Form, Input, Checkbox, Button } from "antd";
 import useInput from '../hooks/useInput';
 
-// export const useInput = (initValue = null) => {
-//     const [value, setter] = useState(initValue);
-//     const handler = useCallback((e) => {
-//         setter(e.target.value);
-//     }, []);
-//     return [value, handler];
-// };
+import { SIGN_UP_REQUEST } from '../reducers/user';
+import { useDispatch, useSelector } from 'react-redux';
+import Router from 'next/router';
 
 
 const Signup = () => {
-    const [id, onChangeId] = useInput("");
-    const [nick, onChangeNick] = useInput("");
+    const dispatch = useDispatch();
+    const [email, onChangeEmail] = useInput("");
+    const [nickname, onChangeNickname] = useInput("");
+    const { signUpLoading, signUpDone, signUpError, me } = useSelector((state) => state.user);
+
+
+    useEffect(() => {
+        console.log("me check for 회원 가입 : ", me);
+        if (me && me.id) {
+            Router.replace('/');
+        }
+    }, [me && me.id]);
+
+    useEffect(() => {
+        if (signUpDone) {
+            Router.replace('/');
+        }
+    }, [signUpDone]);
+
+    useEffect(() => {
+        if (signUpError) {
+            alert(signUpError);
+        }
+    }, [signUpError]);
+    
     const [password, onChangePassword] = useInput("");
     const [passwordCheck, setPasswordCheck] = useState("");
     const [passwordError, setPasswordError] = useState(false);
@@ -30,10 +49,17 @@ const Signup = () => {
         if (!term) {
             return setTermError(true);
         }
+        console.log("email, nickname, password : " , email, nickname, password);
 
-        console.log("회원 가입 정보 : id, nick : ", id, nick);
-
-    },[password, passwordCheck, term]);
+        return dispatch({
+            type: SIGN_UP_REQUEST,
+            data: {
+                email,
+                password,
+                nickname,
+            },
+        });
+    },[email, password, passwordCheck, term]);
 
     const onChangeTerm = useCallback((e) => {
         setTermError(false);
@@ -54,13 +80,13 @@ const Signup = () => {
             </Head>
             <Form onFinish={onSubmit} style={{ padding: 10 }}>
                 <div>
-                    <label htmlFor="user-id">아이디</label>
+                    <label htmlFor="user-id">이메일</label>
                     <br />
                     <Input
                         name="user-id"
-                        value={id}
+                        value={email}
                         required
-                        onChange={onChangeId}
+                        onChange={onChangeEmail}
                     />
                 </div>
                 <div>
@@ -68,9 +94,9 @@ const Signup = () => {
                     <br />
                     <Input
                         name="user-nick"
-                        value={nick}
+                        value={nickname}
                         required
-                        onChange={onChangeNick}
+                        onChange={onChangeNickname}
                     />
                 </div>
                 <div>
@@ -115,9 +141,10 @@ const Signup = () => {
                     )}
                 </div>
                 <div style={{ marginTop: 10 }}>
-                    <Button type="primary" htmlType="submit">
+                    {/* <Button type="primary" htmlType="submit">
                         가입하기
-                    </Button>
+                    </Button> */}
+                    <Button type="primary" htmlType="submit" loading={signUpLoading}>가입하기</Button>
                 </div>
             </Form>
         </AppLayout>

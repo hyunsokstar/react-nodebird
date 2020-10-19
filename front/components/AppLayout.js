@@ -22,7 +22,8 @@ const SearchInput = styled(Input.Search)`
 
 const AppLayout = ({ children }) => {
     const { logInDone } = useSelector((state) => state.user)
-    console.log("logInDone : ", logInDone);
+    const { me } = useSelector((state) => state.user);
+    // console.log("logInDone : ", logInDone);
     return (
         <div>
             <Menu mode="horizontal">
@@ -45,7 +46,7 @@ const AppLayout = ({ children }) => {
             <Row gutter={8}>
                 <Col xs={24} md={6}>
                     {/* 왼쪽 메뉴 */}
-                    {logInDone ? (
+                    {me ? (
                         <UserProfile />
                     ) : (
                             <LoginForm />

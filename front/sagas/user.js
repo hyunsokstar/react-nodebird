@@ -12,22 +12,32 @@ import {
     UNFOLLOW_FAILURE,
     UNFOLLOW_REQUEST,
     UNFOLLOW_SUCCESS,
+    SIGN_UP_REQUEST,
+    SIGN_UP_SUCCESS,
+    SIGN_UP_FAILURE,
+
 } from '../reducers/user';
+import axios from "axios";
+
 
 
 function logInAPI(data) {
-    return axios.post('/api/login', data);
+    console.log("login data(saga) : ", data);
+    return axios.post('/user/login', data);
 }
 
 function* logIn(action) {
     try {
-        console.log('saga logIn');
-        // const result = yield call(logInAPI);
-        yield delay(1000);
+        // console.log('saga logIn');
+        // yield delay(1000);
+        const result = yield call(logInAPI , action.data);
+        console.log("login response from backend : ", result);
 
         yield put({
             type: LOG_IN_SUCCESS,
             data: { ...action.data },
+            data: result.data
+            // data: { ...action.data },
         });
     } catch (err) {
         console.error(err);
@@ -40,14 +50,14 @@ function* logIn(action) {
 
 
 function logOutAPI(data) {
-    return axios.post('/api/login', data);
+    return axios.post('/user/logout', data);
 }
 
 function* logOut(action) {
     try {
-        console.log('saga logout');
-        // const result = yield call(logInAPI);
-        yield delay(2000);
+        const result = yield call(logOutAPI);
+        console.log("logout result: ", result);
+        // yield delay(2000);
 
         yield put({
             type: LOG_OUT_SUCCESS,
@@ -103,6 +113,29 @@ function* unfollow(action) {
     }
 }
 
+function signUpAPI(data) {
+    console.log("saga signUpAPI 실행 확인 data :", data);
+    return axios.post('/user', data);
+}
+
+function* signUp(action) {
+    console.log("signup 실행 check");
+    try {
+        // yield delay(1000);
+        const result = yield call(signUpAPI, action.data);
+        console.log("result : " , result);
+
+        yield put({
+            type: SIGN_UP_SUCCESS,
+        });
+    } catch (err) {
+        console.error(err);
+        yield put({
+            type: SIGN_UP_FAILURE,
+            error: err.response.data,
+        });
+    }
+}
 
 function* watchLogOut() {
     console.log("saga watch 실행 check");
@@ -122,11 +155,17 @@ function* watchUnfollow() {
     yield takeLatest(UNFOLLOW_REQUEST, unfollow);
 }
 
+function* watchSignUp() {
+    yield takeLatest(SIGN_UP_REQUEST, signUp);
+}
+
 export default function* userSaga() {
     yield all([
         fork(watchLogIn),
         fork(watchLogOut),
         fork(watchFollow),
         fork(watchUnfollow),
+        fork(watchSignUp),
+
     ]);
 }

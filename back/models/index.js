@@ -5,7 +5,8 @@ const Sequelize = require('sequelize');
 const env = process.env.NODE_ENV || 'development';
 
 // 위에서 생성한 디비 설정의 development 부분을 참조하는 config 객체 생성
-const config = require('../config/config.json')[env];
+// const config = require('../config/config.json')[env];
+const config = require('../config/config.js')[env];
 
 const db = {};
 
