@@ -4,31 +4,6 @@ const router = express.Router();
 const { Op } = require('sequelize');
 
 
-// router.get('/', async (req, res, next) => {
-//     try {
-//         const posts = await Post.findAll({
-//             limit: 10,
-//             order: [['createdAt', 'DESC']],
-//             include: [{
-//                 model: User,
-//             }, {
-//                 model: Image,
-//             }, {
-//                 model: Comment,
-//                 include: [{
-//                     model: User,
-//                     attributes: ['id', 'nickname'],
-//                     order: [['createdAt', 'DESC']],
-//                 }],
-//             }],
-//         });
-//         res.status(200).json(posts);
-//     } catch (error) {
-//         console.error(error);
-//         next(error);
-//     }
-// });
-
 router.get('/', async (req, res, next) => { // GET /posts
     try {
         const where = {};
@@ -55,9 +30,23 @@ router.get('/', async (req, res, next) => { // GET /posts
                     model: User, // 좋아요 누른 사람
                     as: 'Likers',
                     attributes: ['id'],
+                },{
+                    model: User, // 좋아요 누른 사람
+                    as: 'Likers',
+                    attributes: ['id'],
+                }, {
+                    model: Post,
+                    as: 'Retweet',
+                    include: [{
+                        model: User,
+                        attributes: ['id', 'nickname'],
+                    }, {
+                        model: Image,
+                    }]
                 }],
+
         });
-        console.log(posts);
+        // console.log(posts);
         res.status(200).json(posts);
     } catch (error) {
         console.error(error);

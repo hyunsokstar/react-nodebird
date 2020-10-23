@@ -11,10 +11,12 @@ module.exports = () => {
         usernameField: 'email',
         passwordField: 'password'
     }, async (email, password, done) => {
+        console.log("email ########## ", email);
+        console.log("password ####### ", password);
 
         try {
             const user = await User.findOne({
-                wehre: { email }
+                where: { email }
             });
             if (!user) {
                 done(null, false, { reason: '존재하지 않는 사용자입니다' });

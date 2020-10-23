@@ -6,8 +6,7 @@ const { User, Post } = require('../models');
 
 
 router.get('/', async (req, res, next) => { // GET /user
-    console.log("req.user : " , req.user);
-
+    // console.log("req.user : " , req.user);
     try {
         if (req.user) {
             const fullUserWithoutPassword = await User.findOne({
@@ -50,6 +49,8 @@ router.post('/login', (req, res, next) => {
             return res.status(401).send(info.reason);
         }
 
+        console.log("user &&&&&&&&&&&&& " , user);
+
         return req.login(user, async (loginErr) => {
             if (loginErr) {
                 console.error(loginErr);
@@ -74,7 +75,7 @@ router.post('/login', (req, res, next) => {
                 }]
             })
             // return res.status(200).json(user);
-            console.log("fullUserWithoutPassword : ", fullUserWithoutPassword);
+            // console.log("fullUserWithoutPassword : ", fullUserWithoutPassword);
             return res.status(200).json(fullUserWithoutPassword);
         });
     })(req, res, next);

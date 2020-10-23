@@ -211,7 +211,11 @@ router.post('/:postId/retweet' , async (req, res, next) => { // POST /post/1/ret
                     model: User,
                     attributes: ['id', 'nickname'],
                 }],
-            }],
+                }, {
+                    model: User, // 좋아요 누른 사람
+                    as: 'Likers',
+                    attributes: ['id'],
+                }],
         })
         res.status(201).json(retweetWithPrevPost);
     } catch (error) {
