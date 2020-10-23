@@ -1,8 +1,13 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useCallback } from "react";
 import { Form, Input } from "antd";
+//
+import useInput from '../hooks/useInput';
+import { useSelector, useDispatch } from 'react-redux';
+import { CHANGE_NICKNAME_REQUEST } from '../reducers/user';
 
 
 const NicknameEditForm = () => {
+
     const style = useMemo(
         () => ({
             marginBottom: "20px",
@@ -11,10 +16,29 @@ const NicknameEditForm = () => {
         }),
         []
     );
+    const dispatch = useDispatch();
+    //
+    const { me } = useSelector((state) => state.user);
+    const [nickname, onChangeNickname] = useInput(me?.nickname || '');
+
+    //
+    const onSubmit = useCallback(() => {
+        console.log("입력한 nickname : " , nickname);
+        dispatch({
+            type: CHANGE_NICKNAME_REQUEST,
+            data: nickname,
+        });
+    }, [nickname]);
 
     return (
         <Form style={style}>
-            <Input.Search addonBefore="닉네임" enterButton="수정" />
+            <Input.Search 
+                addonBefore="닉네임" 
+                enterButton="수정" 
+                value={nickname}
+                onChange={onChangeNickname} 
+                onSearch={onSubmit} 
+                />
         </Form>
     );
 };

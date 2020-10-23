@@ -25,6 +25,22 @@ export const initialState = {
     signUpDone: false,
     signUpError: null,
 
+    loadUserLoading: false, // 유저 정보 가져오기 시도중
+    loadUserDone: false,
+    loadUserError: null,
+
+    changeNicknameLoading: false, // 닉네임 변경 시도중
+    changeNicknameDone: false,
+    changeNicknameError: null,    
+
+    loadFollowingsLoading: false,
+    loadFollowingsDone: false,
+    loadFollowingsError: null,
+    
+    loadFollowersLoading: false,
+    loadFollowersDone: false,
+    loadFollowersError: null,
+
 };
 
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
@@ -49,6 +65,22 @@ export const UNFOLLOW_FAILURE = 'UNFOLLOW_FAILURE';
 export const SIGN_UP_REQUEST = 'SIGN_UP_REQUEST';
 export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS';
 export const SIGN_UP_FAILURE = 'SIGN_UP_FAILURE';
+
+export const LOAD_USER_REQUEST = 'LOAD_USER_REQUEST';
+export const LOAD_USER_SUCCESS = 'LOAD_USER_SUCCESS';   
+export const LOAD_USER_FAILURE = 'LOAD_USER_FAILURE';
+
+export const CHANGE_NICKNAME_REQUEST = 'CHANGE_NICKNAME_REQUEST';
+export const CHANGE_NICKNAME_SUCCESS = 'CHANGE_NICKNAME_SUCCESS';
+export const CHANGE_NICKNAME_FAILURE = 'CHANGE_NICKNAME_FAILURE';
+
+export const LOAD_FOLLOWINGS_REQUEST = 'LOAD_FOLLOWINGS_REQUEST';
+export const LOAD_FOLLOWINGS_SUCCESS = 'LOAD_FOLLOWINGS_SUCCESS';
+export const LOAD_FOLLOWINGS_FAILURE = 'LOAD_FOLLOWINGS_FAILURE';
+
+export const LOAD_FOLLOWERS_REQUEST = 'LOAD_FOLLOWERS_REQUEST';
+export const LOAD_FOLLOWERS_SUCCESS = 'LOAD_FOLLOWERS_SUCCESS';
+export const LOAD_FOLLOWERS_FAILURE = 'LOAD_FOLLOWERS_FAILURE';
 
 
 const dummyUser = (data) => ({
@@ -88,7 +120,6 @@ const reducer = (state = initialState, action) => {
                 draft.logOutError=false;
                 break;
             case "LOG_OUT_SUCCESS":
-
                 draft.logOutLoading=false;
                 draft.logOutDone=true
                 draft.me=null;
@@ -98,13 +129,11 @@ const reducer = (state = initialState, action) => {
                 draft.logOutLoading=false,
                 draft.logOutDone=false
             case ADD_POST_TO_ME:
- 
                 draft.me.Posts.unshift({ id: action.data });
                 break;
             case REMOVE_POST_OF_ME:
                 draft.me.Posts = draft.me.Posts.filter((v) => v.id !== action.data);
                 break;
-
             case FOLLOW_REQUEST:
                 draft.followLoading = true;
                 draft.followError = null;
@@ -133,7 +162,6 @@ const reducer = (state = initialState, action) => {
                 draft.unfollowLoading = false;
                 draft.unfollowError = action.error;
                 break;
-
             case SIGN_UP_REQUEST:
                 draft.signUpLoading = true;
                 draft.signUpError = null;
@@ -146,6 +174,51 @@ const reducer = (state = initialState, action) => {
             case SIGN_UP_FAILURE:
                 draft.signUpLoading = false;
                 draft.signUpError = action.error;
+                break;
+
+            case LOAD_USER_REQUEST:
+                draft.loadUserLoading = true;
+                draft.loadUserError = null;
+                draft.loadUserDone = false;
+                break;
+            case LOAD_USER_SUCCESS:
+                draft.loadUserLoading = false;
+                draft.me = action.data;
+                draft.loadUserDone = true;
+                break;
+            case LOAD_USER_FAILURE:
+                draft.loadUserLoading = false;
+                draft.loadUserError = action.error;
+                break;
+                
+            case CHANGE_NICKNAME_REQUEST:
+                draft.changeNicknameLoading = true;
+                draft.changeNicknameError = null;
+                draft.changeNicknameDone = false;
+                break;
+            case CHANGE_NICKNAME_SUCCESS:
+                draft.me.nickname = action.data.nickname;
+                draft.changeNicknameLoading = false;
+                draft.changeNicknameDone = true;
+                break;
+            case CHANGE_NICKNAME_FAILURE:
+                draft.changeNicknameLoading = false;
+                draft.changeNicknameError = action.error;
+                break;
+
+            case LOAD_FOLLOWINGS_REQUEST:
+                draft.loadFollowingsLoading = true;
+                draft.loadFollowingsError = null;
+                draft.loadFollowingsDone = false;
+                break;
+            case LOAD_FOLLOWINGS_SUCCESS:
+                draft.loadFollowingsLoading = false;
+                draft.me.Followings = action.data;
+                draft.loadFollowingsDone = true;
+                break;
+            case LOAD_FOLLOWINGS_FAILURE:
+                draft.loadFollowingsLoading = false;
+                draft.loadFollowingsError = action.error;
                 break;
 
             default:

@@ -4,28 +4,20 @@ import PostCard from "../components/PostCard";
 import { useEffect } from 'react';
 import { LOAD_POSTS_REQUEST } from '../reducers/post';
 import { useSelector, useDispatch } from 'react-redux';
+import { LOAD_USER_REQUEST } from '../reducers/user';
 
 
 const Home = () => {
     const dispatch = useDispatch();
     const { me } = useSelector((state) => state.user);
-    // const { mainPosts } = useSelector(state => state.post);
     const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector((state) => state.post);
 
-    // useEffect(()=> {
-    //     function onScroll(){
-    //         console.log(window.scrollY, document.documentElement.clientHeight, document.documentElement.scrollHeight);
-    //         if(window.scrollY + document.documentElement.clientHeight === document.documentElement.scrollHeight) {
-    //             console.log("화면이 바닥에 도달했습니다.");
-    //         }
-    //     }
-    //     window.addEventListener('scroll', onScroll);
-    //     return() => {
-    //         window.removeEventListener('scroll', onScroll);
-    //     }
-    // },[]);
-
     useEffect(() => {
+
+        dispatch({
+            type: LOAD_USER_REQUEST,
+        });
+
         dispatch({
             type: LOAD_POSTS_REQUEST,
         });
@@ -35,14 +27,13 @@ const Home = () => {
         function onScroll() {
             // console.log("scroll event 발생");
             if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
-                // console.log("화면이 바닥에 도달했습니다. 22");
-                console.log("hasMorePosts : ", hasMorePosts);
-                console.log("loadPostsLoading : ", loadPostsLoading);
-
+                // console.log("hasMorePosts : ", hasMorePosts);
                 if (hasMorePosts && !loadPostsLoading) {
                     console.log("화면이 바닥에 도달 + 포스팅 추가!!");
+                    const lastId = mainPosts[mainPosts.length - 1]?.id;
                     dispatch({
                         type: LOAD_POSTS_REQUEST,
+                        lastId,
                     });
                 }
             }

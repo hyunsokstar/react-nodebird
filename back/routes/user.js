@@ -74,13 +74,14 @@ router.post('/login', (req, res, next) => {
                 }]
             })
             // return res.status(200).json(user);
+            console.log("fullUserWithoutPassword : ", fullUserWithoutPassword);
             return res.status(200).json(fullUserWithoutPassword);
         });
     })(req, res, next);
 });
 
 router.post('/logout' , (req, res) => {
-    console.log("req.user(at logout) : ", req.user);
+    console.log("req.user : ###### ", req.user);
     req.logout();
     req.session.destroy();
     res.send('ok');
@@ -115,6 +116,76 @@ router.post('/', async (req, res, next) => { // POST /user/
         console.error(error);
         next(error); // status 500
     }
+});
+
+router.patch('/nickname' , async (req, res, next) => {
+    try {
+        await User.update({
+            nickname: req.body.nickname,
+        }, {
+            where: { id: req.user.id },
+        });
+        res.status(200).json({ nickname: req.body.nickname });
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
+router.get('/followers' , async (req, res, next) => { // GET /user/followers
+    try {
+        const user = await User.findOne({ where: { id: req.user.id } });
+        if (!user) {
+            res.status(403).send('없는 사람을 찾으려고 하시네요?');
+        }
+        const followers = await user.getFollowers();
+        res.status(200).json(followers);
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
+router.get('/followings' , async (req, res, next) => { // GET /user/followings
+    try {
+        const user = await User.findOne({ where: { id: req.user.id } });
+        if (!user) {
+            res.status(403).send('없는 사람을 찾으려고 하시네요?');
+        }
+        const followings = await user.getFollowings();
+        res.status(200).json(followings);
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
+router.patch('/:userId/follow' , async (req, res, next) => { // PATCH /user/1/follow
+  try {
+    const user = await User.findOne({ where: { id: req.params.userId }});
+    if (!user) {
+      res.status(403).send('없는 사람을 팔로우하려고 하시네요?');
+    }
+    await user.addFollowers(req.user.id);
+    res.status(200).json({ UserId: parseInt(req.params.userId, 10) });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.delete('/:userId/follow' , async (req, res, next) => { // DELETE /user/1/follow
+  try {
+    const user = await User.findOne({ where: { id: req.params.userId }});
+    if (!user) {
+      res.status(403).send('없는 사람을 언팔로우하려고 하시네요?');
+    }
+    await user.removeFollowers(req.user.id);
+    res.status(200).json({ UserId: parseInt(req.params.userId, 10) });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
 });
 
 

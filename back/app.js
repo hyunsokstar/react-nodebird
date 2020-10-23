@@ -1,6 +1,8 @@
 const express = require('express');
 const postRouter = require('./routes/post');
 const userRouter = require('./routes/user');
+const postsRouter = require('./routes/posts');
+
 const cors = require('cors');
 const db = require('./models');
 
@@ -15,6 +17,7 @@ const session = require('express-session');
 //쿠키 파서 임포트
 const cookieParser = require('cookie-parser');
 
+const path = require('path');
 
 // 익스프레스 서버 객체 생성
 const app = express();
@@ -42,6 +45,10 @@ app.use(cors({
     credentials: true,
 }));
 
+
+// 파일 서빙 설정
+app.use('/', express.static(path.join(__dirname, 'uploads')));
+
 // 리덕스 사가에서 보낸 데이터를 req.body로 받기 위한 설정
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -63,6 +70,7 @@ app.use(passport.session());
 
 // 라우터 로직 분기
 app.use('/post', postRouter);
+app.use('/posts', postsRouter);
 app.use('/user', userRouter);
 
 

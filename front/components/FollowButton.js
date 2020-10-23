@@ -11,6 +11,7 @@ const FollowButton = ({post}) => {
     const isFollowing = me?.Followings.find((v) => v.id === post.User.id);
 
     const onClickButton = useCallback(() => {
+        console.log("post.User.id : ", post.User.id);
         if (isFollowing) {
             dispatch({
                 type: UNFOLLOW_REQUEST,

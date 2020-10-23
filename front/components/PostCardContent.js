@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 
 const PostCardContent = ({ postData }) => {
-    // console.log("postData : ", postData);
+    // console.log("postData(at PostCardContent) : ", postData);
 
     return (
         <div>
