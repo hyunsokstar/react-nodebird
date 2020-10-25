@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { PlusOutlined } from '@ant-design/icons';
-
+import { backUrl } from '../config/config';
 
 const PostImages = ({ images }) => {
     if (images.length === 1) {
         return (
             <>
-                <img role="presentation" src={images[0].src} alt={images[0].src} />
+                <img role="presentation" src={`${backUrl}/${images[0].src}`} alt={images[0].src} />
             </>
         );
     }
@@ -15,8 +15,8 @@ const PostImages = ({ images }) => {
         return (
             <>
                 <div>
-                    <img role="presentation" src={images[0].src} alt={images[0].src} width="50%" />
-                    <img role="presentation" src={images[1].src} alt={images[1].src} width="50%" />
+                    <img role="presentation" src={`${backUrl}/${images[0].src}`} alt={images[0].src} width="50%" />
+                    <img role="presentation" src={`${backUrl}/${images[1].src}`} alt={images[1].src} width="50%" />
                 </div>
             </>
         );
@@ -25,7 +25,7 @@ const PostImages = ({ images }) => {
     return (
         <>
             <div>
-                <img role="presentation" src={images[0].src} alt={images[0].src} width="50%" />
+                <img role="presentation" src={`${backUrl}/${images[0].src}`} alt={images[0].src} width="50%" />
                 <div
                     role="presentation"
                     style={{ display: 'inline-block', width: '50%', textAlign: 'center', verticalAlign: 'middle' }}

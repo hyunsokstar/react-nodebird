@@ -1,0 +1,1 @@
+axios.defaults.baseUrl = "http://http://3.34.130.207/";
