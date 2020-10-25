@@ -4,6 +4,7 @@ import faker from 'faker';
 
 export const initialState = {
     mainPosts: [],
+    
     addPostLoading: false,
     addPostDone: false,
     addPostError: null,
@@ -45,6 +46,7 @@ export const initialState = {
     retweetDone: false,
     retweetError: null,
 
+    singlePost: null,
 };
 
 export const generateDummyPost = (number) => Array(number).fill().map(()=> ({
@@ -66,15 +68,10 @@ export const generateDummyPost = (number) => Array(number).fill().map(()=> ({
     }],
 }));
 
-// initialState.mainPosts = initialState.mainPosts.concat(
-//     generateDummyPost(10)
-// )
-
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
 
-////
 export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
 export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
@@ -104,16 +101,17 @@ export const RETWEET_REQUEST = 'RETWEET_REQUEST';
 export const RETWEET_SUCCESS = 'RETWEET_SUCCESS';
 export const RETWEET_FAILURE = 'RETWEET_FAILURE';
 
-////
-const dummyComment = (data) => ({
-    id: shortId.generate(),
-    content: data,
-    User: {
-        id: 1,
-        nickname: "제로초",
-    },
-});
+export const LOAD_POST_REQUEST = 'LOAD_POST_REQUEST';
+export const LOAD_POST_SUCCESS = 'LOAD_POST_SUCCESS';
+export const LOAD_POST_FAILURE = 'LOAD_POST_FAILURE';
 
+export const LOAD_USER_POSTS_REQUEST = 'LOAD_USER_POSTS_REQUEST';
+export const LOAD_USER_POSTS_SUCCESS = 'LOAD_USER_POSTS_SUCCESS';
+export const LOAD_USER_POSTS_FAILURE = 'LOAD_USER_POSTS_FAILURE';
+
+export const LOAD_HASHTAG_POSTS_REQUEST = 'LOAD_HASHTAG_POSTS_REQUEST';
+export const LOAD_HASHTAG_POSTS_SUCCESS = 'LOAD_HASHTAG_POSTS_SUCCESS';
+export const LOAD_HASHTAG_POSTS_FAILURE = 'LOAD_HASHTAG_POSTS_FAILURE';
 
 const reducer = (state = initialState, action) => {
     return produce(state, (draft) => {
@@ -152,11 +150,6 @@ const reducer = (state = initialState, action) => {
                 draft.removePostDone = false;
                 draft.removePostError = null;
                 break;
-            // case REMOVE_POST_SUCCESS:
-            //     draft.removePostLoading = false;
-            //     draft.removePostDone = true;
-            //     draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data);
-            //     break;
             case REMOVE_POST_SUCCESS:
                 draft.removePostLoading = false;
                 draft.removePostDone = true;
@@ -168,23 +161,24 @@ const reducer = (state = initialState, action) => {
                 draft.removePostError = action.error;
                 break;
                 
-            case LOAD_POSTS_REQUEST:
-                draft.loadPostsLoading = true;
-                draft.loadPostsDone = false;
-                draft.loadPostsError = null;
-                break;
-            case LOAD_POSTS_SUCCESS:
-                draft.loadPostsLoading = false;
-                draft.loadPostsDone = true;
-                // draft.mainPosts = action.data.concat(draft.mainPosts);
-                draft.mainPosts = draft.mainPosts.concat(action.data);
-                // draft.hasMorePosts = draft.mainPosts.length < 50;
-                draft.hasMorePosts = action.data.length === 10;
-                break;
-            case LOAD_POSTS_FAILURE:
-                draft.loadPostsLoading = false;
-                draft.loadPostsError = action.error;
-                break;
+            // case LOAD_POSTS_REQUEST:
+            //     draft.loadPostsLoading = true;
+            //     draft.loadPostsDone = false;
+            //     draft.loadPostsError = null;
+            //     break;
+            // case LOAD_POSTS_SUCCESS:
+            //     draft.loadPostsLoading = false;
+            //     draft.loadPostsDone = true;
+            //     // draft.mainPosts = action.data.concat(draft.mainPosts);
+            //     draft.mainPosts = draft.mainPosts.concat(action.data);
+            //     // draft.hasMorePosts = draft.mainPosts.length < 50;
+            //     draft.hasMorePosts = action.data.length === 10;
+            //     break;
+            // case LOAD_POSTS_FAILURE:
+            //     draft.loadPostsLoading = false;
+            //     draft.loadPostsError = action.error;
+            //     break;
+                
             case UPLOAD_IMAGES_REQUEST:
                 draft.uploadImagesLoading = true;
                 draft.uploadImagesDone = false;
@@ -253,6 +247,61 @@ const reducer = (state = initialState, action) => {
             case RETWEET_FAILURE:
                 draft.retweetLoading = false;
                 draft.retweetError = action.error;
+                break;
+
+            case LOAD_POST_REQUEST:
+                draft.loadPostLoading = true;
+                draft.loadPostDone = false;
+                draft.loadPostError = null;
+                break;
+            case LOAD_POST_SUCCESS:
+                draft.loadPostLoading = false;
+                draft.loadPostDone = true;
+                draft.singlePost = action.data;
+                break;
+            case LOAD_POST_FAILURE:
+                draft.loadPostLoading = false;
+                draft.loadPostError = action.error;
+                break;
+
+            case LOAD_POSTS_REQUEST:
+                draft.loadPostsLoading = true;
+                draft.loadPostsDone = false;
+                draft.loadPostsError = null;
+                break;
+            case LOAD_POSTS_SUCCESS:
+                draft.loadPostsLoading = false;
+                draft.loadPostsDone = true;
+                // draft.mainPosts = action.data.concat(draft.mainPosts);
+                draft.mainPosts = draft.mainPosts.concat(action.data);
+                // draft.hasMorePosts = draft.mainPosts.length < 50;
+                draft.hasMorePosts = action.data.length === 10;
+                break;
+            case LOAD_POSTS_FAILURE:
+                draft.loadPostsLoading = false;
+                draft.loadPostsError = action.error;
+                break;
+
+            case LOAD_USER_POSTS_REQUEST:
+            case LOAD_POSTS_REQUEST:
+            case LOAD_HASHTAG_POSTS_REQUEST:
+                draft.loadPostsLoading = true;
+                draft.loadPostsDone = false;
+                draft.loadPostsError = null;
+                break;
+            case LOAD_USER_POSTS_SUCCESS:
+            case LOAD_HASHTAG_POSTS_SUCCESS:
+            case LOAD_POSTS_SUCCESS:
+                draft.loadPostsLoading = false;
+                draft.loadPostsDone = true;
+                draft.mainPosts = draft.mainPosts.concat(action.data);
+                draft.hasMorePosts = action.data.length === 10;
+                break;
+            case LOAD_USER_POSTS_FAILURE:
+            case LOAD_HASHTAG_POSTS_FAILURE:
+            case LOAD_POSTS_FAILURE:
+                draft.loadPostsLoading = false;
+                draft.loadPostsError = action.error;
                 break;
 
             default:

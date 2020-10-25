@@ -32,6 +32,10 @@ import {
     LOAD_FOLLOWINGS_SUCCESS,
     LOAD_FOLLOWINGS_FAILURE,
 
+    LOAD_MY_INFO_REQUEST, 
+    LOAD_MY_INFO_SUCCESS,
+    LOAD_MY_INFO_FAILURE, 
+
 } from '../reducers/user';
 import axios from "axios";
 
@@ -159,8 +163,11 @@ function* signUp(action) {
     }
 }
 
-function loadUserAPI() {
-    return axios.get('/user');
+// function loadUserAPI() {
+//     return axios.get('/user');
+// }
+function loadUserAPI(data) {
+    return axios.get(`/user/${data}`);
 }
 
 function* loadUser(action) {
@@ -240,6 +247,28 @@ function* loadFollowings(action) {
     }
 }
 
+function loadMyInfoAPI() {
+    return axios.get('/user');
+}
+
+function* loadMyInfo() {
+    try {
+        const result = yield call(loadMyInfoAPI);
+        yield put({
+            type: LOAD_MY_INFO_SUCCESS,
+            data: result.data,
+        });
+    } catch (err) {
+        console.error(err);
+        yield put({
+            type: LOAD_MY_INFO_FAILURE,
+            error: err.response.data,
+        });
+    }
+}
+
+//////////////////////////////////////
+
 function* watchLogOut() {
     console.log("saga watch 실행 check");
     yield takeLatest(LOG_OUT_REQUEST, logOut);
@@ -278,6 +307,12 @@ function* watchLoadFollowings() {
     yield takeLatest(LOAD_FOLLOWINGS_REQUEST, loadFollowings);
 }
 
+function* watchLoadMyInfo() {
+    yield takeLatest(LOAD_MY_INFO_REQUEST, loadMyInfo);
+}
+
+
+
 export default function* userSaga() {
     yield all([
         fork(watchLogIn),
@@ -290,6 +325,7 @@ export default function* userSaga() {
 
         fork(watchLoadFollowers),
         fork(watchLoadFollowings),
+        fork(watchLoadMyInfo),
 
     ]);
 }

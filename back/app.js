@@ -2,6 +2,8 @@ const express = require('express');
 const postRouter = require('./routes/post');
 const userRouter = require('./routes/user');
 const postsRouter = require('./routes/posts');
+const hashtagRouter = require('./routes/hashtag');
+
 
 const cors = require('cors');
 const db = require('./models');
@@ -72,6 +74,7 @@ app.use(passport.session());
 app.use('/post', postRouter);
 app.use('/posts', postsRouter);
 app.use('/user', userRouter);
+app.use('/hashtag', hashtagRouter);
 
 
 app.listen(3065, () => {

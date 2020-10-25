@@ -224,5 +224,35 @@ router.post('/:postId/retweet' , async (req, res, next) => { // POST /post/1/ret
     }
 });
 
+router.get('/:postId', async (req, res, next) => {
+    console.log("postId######### 게시글 1개 ######### : ", req.params.postId);
+    try {
+        const post = await Post.findOne({
+            where: { id: req.params.postId },
+            include: [{
+                model: User,
+                attributes: ['id', 'nickname'],
+            }, {
+                model: Image,
+            }, {
+                model: Comment,
+                include: [{
+                    model: User,
+                    attributes: ['id', 'nickname'],
+                    order: [['createdAt', 'DESC']],
+                }],
+            }, {
+                model: User, // 좋아요 누른 사람
+                as: 'Likers',
+                attributes: ['id'],
+            }],
+        });
+        console.log("post 객체 ############ 게시글 1개 ######### : ", post);
+        res.status(200).json(post);
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
 
 module.exports = router;
