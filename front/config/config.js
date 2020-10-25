@@ -1,1 +1,1 @@
-axios.defaults.baseUrl = "http://http://3.34.130.207/";
+axios.defaults.baseUrl = "http://3.34.130.207/";
