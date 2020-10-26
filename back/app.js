@@ -43,7 +43,7 @@ dotenv.config();
 // }));
 // cors 설정 + 쿠키 설정
 app.use(cors({
-    origin: true,
+    origin: ['http://127.0.0.1:3000','http://localhost:3000', 'nodebird.com', 'http://3.34.125.120/'],
     credentials: true,
 }));
 
@@ -81,6 +81,12 @@ app.use('/user', userRouter);
 app.use('/hashtag', hashtagRouter);
 
 
-app.listen(3065, () => {
+// app.listen(3065, () => {
+//     console.log("Express Server is Excuting");
+// });
+
+const port = process.env.NODE_ENV === 'production' ? 80 : 3065
+
+app.listen(port , () => {
     console.log("Express Server is Excuting");
 });

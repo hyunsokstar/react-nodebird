@@ -16,14 +16,14 @@ const Home = () => {
     const { me } = useSelector((state) => state.user);
     const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector((state) => state.post);
 
-    useEffect(() => {
-        dispatch({
-            type: LOAD_MY_INFO_REQUEST,
-        });
-        dispatch({
-            type: LOAD_POSTS_REQUEST,
-        });
-    }, []);
+    // useEffect(() => {
+    //     dispatch({
+    //         type: LOAD_MY_INFO_REQUEST,
+    //     });
+    //     dispatch({
+    //         type: LOAD_POSTS_REQUEST,
+    //     });
+    // }, []);
 
     useEffect(() => {
         function onScroll() {
@@ -49,9 +49,9 @@ const Home = () => {
     return (
         <AppLayout>
             {me && <PostForm />}
-            {mainPosts.map((c) => {
+            {mainPosts.map((post) => {
                 return (
-                    <PostCard key={c.id} post={c} />
+                    <PostCard key={post.id} post={post} />
                 );
             })}
         </AppLayout>

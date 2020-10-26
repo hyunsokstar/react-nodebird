@@ -1303,7 +1303,9 @@ var config = __webpack_require__("OcYQ");
 
 
 
-external_axios_default.a.defaults.baseURL = 'http://localhost:3065';
+let port = true ? 80 : undefined; // axios.defaults.baseURL = 'http://localhost:3065';
+
+external_axios_default.a.defaults.baseURL = `http://localhost:${port}`;
 external_axios_default.a.defaults.withCredentials = true;
 function* rootSaga() {
   yield Object(effects_["all"])([Object(effects_["fork"])(postSaga), Object(effects_["fork"])(userSaga)]);
@@ -1704,7 +1706,8 @@ module.exports = require("faker");
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return backUrl; });
 // import axios from "axios";
 // export const backUrl = 'http://3.34.130.207/';  
-const backUrl = 'http://localhost:3065/';
+let port = true ? 80 : undefined;
+const backUrl = `http://localhost:/${port}`;
 
 /***/ }),
 
@@ -1739,7 +1742,7 @@ var external_antd_ = __webpack_require__("Exp3");
 var external_react_redux_ = __webpack_require__("h74D");
 
 // EXTERNAL MODULE: ./reducers/post.js
-var post = __webpack_require__("p+NB");
+var reducers_post = __webpack_require__("p+NB");
 
 // EXTERNAL MODULE: ./config/config.js
 var config = __webpack_require__("OcYQ");
@@ -1785,7 +1788,7 @@ const PostForm = () => {
     });
     console.log("imageFormData : ", imageFormData);
     dispatch({
-      type: post["G" /* UPLOAD_IMAGES_REQUEST */],
+      type: reducers_post["G" /* UPLOAD_IMAGES_REQUEST */],
       data: imageFormData
     });
   });
@@ -1800,13 +1803,13 @@ const PostForm = () => {
     });
     formData.append('content', text);
     return dispatch({
-      type: post["e" /* ADD_POST_REQUEST */],
+      type: reducers_post["e" /* ADD_POST_REQUEST */],
       data: formData
     });
   }, [text, imagePaths]);
   const onRemoveImage = Object(external_react_["useCallback"])(index => () => {
     dispatch({
-      type: post["v" /* REMOVE_IMAGE */],
+      type: reducers_post["v" /* REMOVE_IMAGE */],
       data: index
     });
   });
@@ -1893,15 +1896,15 @@ const Home = () => {
     mainPosts,
     hasMorePosts,
     loadPostsLoading
-  } = Object(external_react_redux_["useSelector"])(state => state.post);
-  Object(external_react_["useEffect"])(() => {
-    dispatch({
-      type: user["o" /* LOAD_MY_INFO_REQUEST */]
-    });
-    dispatch({
-      type: post["n" /* LOAD_POSTS_REQUEST */]
-    });
-  }, []);
+  } = Object(external_react_redux_["useSelector"])(state => state.post); // useEffect(() => {
+  //     dispatch({
+  //         type: LOAD_MY_INFO_REQUEST,
+  //     });
+  //     dispatch({
+  //         type: LOAD_POSTS_REQUEST,
+  //     });
+  // }, []);
+
   Object(external_react_["useEffect"])(() => {
     function onScroll() {
       // console.log("scroll event 발생");
@@ -1925,10 +1928,10 @@ const Home = () => {
       window.removeEventListener('scroll', onScroll);
     };
   }, [mainPosts, hasMorePosts, loadPostsLoading]);
-  return pages_jsx(AppLayout["a" /* default */], null, me && pages_jsx(components_PostForm, null), mainPosts.map(c => {
+  return pages_jsx(AppLayout["a" /* default */], null, me && pages_jsx(components_PostForm, null), mainPosts.map(post => {
     return pages_jsx(PostCard["a" /* default */], {
-      key: c.id,
-      post: c
+      key: post.id,
+      post: post
     });
   }));
 };
@@ -1947,7 +1950,7 @@ const getServerSideProps = configureStore["a" /* default */].getServerSideProps(
     type: user["o" /* LOAD_MY_INFO_REQUEST */]
   });
   context.store.dispatch({
-    type: post["n" /* LOAD_POSTS_REQUEST */]
+    type: reducers_post["n" /* LOAD_POSTS_REQUEST */]
   }); // 아래 설정을 추가해야 리덕스 사가 요청까지 완료 된뒤 페이지가 출력 된다.
 
   context.store.dispatch(external_redux_saga_["END"]);
