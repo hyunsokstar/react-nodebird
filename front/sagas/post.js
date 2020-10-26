@@ -153,7 +153,7 @@ function* loadPosts(action) {
         console.error(err);
         yield put({
             type: LOAD_POSTS_FAILURE,
-            data: err.response,
+            data: err.response.data,
         });
     }
 }
@@ -165,13 +165,14 @@ function uploadImagesAPI(data) {
 function* uploadImages(action) {
     try {
         const result = yield call(uploadImagesAPI, action.data);
-        console.log("result.data(response for image upload) : ", result.data);
+        console.log("result.data (response for image upload) : ", result.data);
 
         yield put({
             type: UPLOAD_IMAGES_SUCCESS,
             data: result.data,
         });
     } catch (err) {
+        console.log("err :::::::::: " , err);
         console.error(err);
         yield put({
             type: UPLOAD_IMAGES_FAILURE,

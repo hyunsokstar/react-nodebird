@@ -158,7 +158,7 @@ function* signUp(action) {
         console.error(err);
         yield put({
             type: SIGN_UP_FAILURE,
-            error: err,
+            error: err.response.data,
         });
     }
 }
@@ -181,7 +181,7 @@ function* loadUser(action) {
         console.error(err);
         yield put({
             type: LOAD_USER_FAILURE,
-            error: err,
+            error: err.response.data,
         });
     }
 }
@@ -201,7 +201,7 @@ function* changeNickname(action) {
         console.error(err);
         yield put({
             type: CHANGE_NICKNAME_FAILURE,
-            error: err,
+            error: err.response.data,
         });
     }
 }
@@ -222,7 +222,7 @@ function* loadFollowers(action) {
         console.error(err);
         yield put({
             type: LOAD_FOLLOWERS_FAILURE,
-            error: err,
+            error: err.response.data,
         });
     }
 }
@@ -242,7 +242,7 @@ function* loadFollowings(action) {
         console.error(err);
         yield put({
             type: LOAD_FOLLOWINGS_FAILURE,
-            error: err,
+            error: err.response.data,
         });
     }
 }
@@ -254,11 +254,13 @@ function loadMyInfoAPI() {
 function* loadMyInfo() {
     try {
         const result = yield call(loadMyInfoAPI);
+        console.log("result for loadMyInfoAPI : ", result);
         yield put({
             type: LOAD_MY_INFO_SUCCESS,
             data: result.data,
         });
     } catch (err) {
+        console.log("err ::::::::::: " , err);
         console.error(err);
         yield put({
             type: LOAD_MY_INFO_FAILURE,
