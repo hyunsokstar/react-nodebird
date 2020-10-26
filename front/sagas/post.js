@@ -153,7 +153,7 @@ function* loadPosts(action) {
         console.error(err);
         yield put({
             type: LOAD_POSTS_FAILURE,
-            data: err.response.data,
+            data: err.response,
         });
     }
 }
@@ -346,7 +346,7 @@ function* loadUserPosts(action) {
         console.error(err);
         yield put({
             type: LOAD_USER_POSTS_FAILURE,
-            data: err.response.data,
+            data: err.response,
         });
     }
 }

@@ -158,7 +158,7 @@ function* signUp(action) {
         console.error(err);
         yield put({
             type: SIGN_UP_FAILURE,
-            error: err.response.data,
+            error: err,
         });
     }
 }
@@ -181,7 +181,7 @@ function* loadUser(action) {
         console.error(err);
         yield put({
             type: LOAD_USER_FAILURE,
-            error: err.response.data,
+            error: err,
         });
     }
 }
@@ -201,7 +201,7 @@ function* changeNickname(action) {
         console.error(err);
         yield put({
             type: CHANGE_NICKNAME_FAILURE,
-            error: err.response.data,
+            error: err,
         });
     }
 }
@@ -222,7 +222,7 @@ function* loadFollowers(action) {
         console.error(err);
         yield put({
             type: LOAD_FOLLOWERS_FAILURE,
-            error: err.response.data,
+            error: err,
         });
     }
 }
@@ -242,7 +242,7 @@ function* loadFollowings(action) {
         console.error(err);
         yield put({
             type: LOAD_FOLLOWINGS_FAILURE,
-            error: err.response.data,
+            error: err,
         });
     }
 }
@@ -262,7 +262,7 @@ function* loadMyInfo() {
         console.error(err);
         yield put({
             type: LOAD_MY_INFO_FAILURE,
-            error: err.response.data,
+            error: err,
         });
     }
 }

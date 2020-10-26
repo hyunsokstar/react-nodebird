@@ -1,1 +1,2 @@
-axios.defaults.baseUrl = "http://3.34.130.207/";
+// import axios from "axios";
+export const backUrl = 'http://34.232.77.127';
