@@ -264,7 +264,7 @@ function* loadMyInfo() {
         console.error(err);
         yield put({
             type: LOAD_MY_INFO_FAILURE,
-            error: err,
+            error: err.response.data,
         });
     }
 }
