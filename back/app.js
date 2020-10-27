@@ -86,6 +86,7 @@ app.use('/hashtag', hashtagRouter);
 // });
 
 const port = process.env.NODE_ENV === 'production' ? 80 : 3065
+console.log("process.env.NODE_ENV : ", process.env.NODE_ENV );
 
 app.listen(port , () => {
     console.log("Express Server is Excuting");
