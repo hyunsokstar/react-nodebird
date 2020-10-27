@@ -43,7 +43,7 @@ dotenv.config();
 // }));
 // cors 설정 + 쿠키 설정
 app.use(cors({
-    origin: ['http://127.0.0.1:3000','http://localhost:3000', 'nodebird.com', 'http://3.34.125.120/'],
+    origin: ['http://127.0.0.1:3000', 'http://localhost:3000', 'nodebird.com', 'http://3.34.130.207'],
     credentials: true,
 }));
 
