@@ -7,7 +7,7 @@ import { backUrl } from '../config/config.js';
 // dotenv.config();
 
 // axios.defaults.baseURL = 'http://localhost:3065';
-axios.defaults.baseURL = 'http://localhost:80';
+axios.defaults.baseURL = backUrl;
 axios.defaults.withCredentials = true;
 
 export default function* rootSaga() {
