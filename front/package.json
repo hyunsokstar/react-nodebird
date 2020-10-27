@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next",
     "build": "cross-env NODE_ENV=production ANALYZE=true next build",
-    "start":"cross-env NODE_ENV=prodcution next start -p 80"
+    "start": "cross-env NODE_ENV=prodcution next start -p 80"
   },
   "author": "",
   "license": "MIT",
@@ -17,7 +17,9 @@
     "axios": "^0.20.0",
     "babel-plugin-styled-components": "^1.11.1",
     "cross-env": "^7.0.2",
+    "dotenv": "^8.2.0",
     "faker": "^5.1.0",
+    "fs": "0.0.1-security",
     "immer": "^7.0.9",
     "next": "^9.5.3",
     "next-redux-saga": "^4.1.2",
