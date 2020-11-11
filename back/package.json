@@ -20,7 +20,7 @@
   "devDependencies": {},
   "scripts": {
     "dev": "nodemon app",
-    "start": "cross-env NODE_ENV=production PORT=80 pm2 start app.js"
+    "start": "cross-env NODE_ENV=production PORT=80 pm2 start app"
   },
   "author": "",
   "license": "ISC"
